@@ -1,1 +1,2 @@
-"# gopractise" 
+- StudentManage为切片模式
+- stuMar为map模式
