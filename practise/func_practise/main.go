@@ -1,14 +1,12 @@
 package main
 
-import (
-	fmt1 "fmt"
-)
+import "fmt"
 
 /*
 func intSum(x int, y int) int {
 	return  x + y
 }
- */
+*/
 /*
 func intSum2(x ...int) int {
 	fmt1.Println(x)
@@ -25,7 +23,7 @@ func main() {
 	ret3 := intSum2(10,20)
 	fmt1.Println(ret1,ret2,ret3)
 }
- */
+*/
 //全局变量
 /*
 var num int64 = 10
@@ -35,7 +33,7 @@ func testGlobalVar(){
 func main(){
 	testGlobalVar()
 }
- */
+*/
 /*
 type calculation func(int,int) int
 
@@ -48,7 +46,7 @@ func main() {
 	c = add
 	fmt1.Println(c(1,2))
 }
- */
+*/
 /*
 func add(x, y int) int {
 	return x + y
@@ -60,14 +58,13 @@ func main() {
 	ret2 := calc(10,20,add)
 	fmt1.Println(ret2)
 }
- */
+*/
 /*
 func add(x, y int) int {
 	return x + y
 }
 
 func sub(x, y int) int {
-	fmt1.Println("=======")
 	return x - y
 }
 
@@ -84,9 +81,15 @@ func do(s string) (func(x,y int) int,error) {
 }
 
 func main() {
-	fmt1.Println(do("-"))
+	ret, error := do("-")
+	if ret == nil {
+		fmt1.Println(error)
+	}else {
+		ret1 := ret(10, 20)
+		fmt1.Println(ret1)
+	}
 }
- */
+*/
 
 /*
 func adder() func(int) int {
@@ -106,7 +109,7 @@ func main() {
 	fmt1.Println(f1(40))
 	fmt1.Println(f1(50))
 }
- */
+*/
 /*
 func makeSuffixFunc(suffix string) func(string) string {
 	return func(name string) string {
@@ -123,7 +126,7 @@ func main() {
 	fmt.Println(jpgFunc("test"))
 	fmt.Println(txtFunc("test"))
 }
- */
+*/
 /*
 func calc(base int) (func(int) int,func(int) int) {
 	add := func(i int) int {
@@ -141,7 +144,7 @@ func main() {
 	f1,f2 := calc(10)
 	fmt.Println(f1(1), f2(2))
 }
- */
+*/
 /*
 func f1() int {
 	x := 5
@@ -177,7 +180,7 @@ func main() {
 	fmt.Println(f3())
 	fmt.Println(f4())
 }
- */
+*/
 /*
 func calc(index string, a, b int) int {
 	ret := a + b
@@ -193,8 +196,8 @@ func main() {
 	defer calc("BB", x, calc("B", x, y))
 	y = 20
 }
- */
-
+*/
+/*
 func dispatchCoin() (left int) {
 	var (
 		coins = 50
@@ -228,7 +231,8 @@ func dispatchCoin() (left int) {
 				getCoin += 4
 			}
 		}
-		 */
+*/
+/*
 		distribution[name] = getCoin
 		coins -= getCoin
 	}
@@ -238,4 +242,27 @@ func dispatchCoin() (left int) {
 func main() {
 	left := dispatchCoin()
 	fmt1.Println("剩下：", left)
+}
+*/
+
+func funcA() {
+	fmt.Println("func A")
+}
+func funcB() {
+	defer func() {
+		err := recover()
+		if err != nil {
+			fmt.Println("recover in B")
+		}
+	}()
+	panic("panic in B")
+}
+
+func funcC() {
+	fmt.Println("func C")
+}
+func main() {
+	funcA()
+	funcB()
+	funcC()
 }
