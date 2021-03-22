@@ -126,28 +126,28 @@ func main() {
 		}
 	*/
 	/*
-	var ary1 = [...]int{1, 3, 5, 7, 8}
-	for i :=0;i<len(ary1);i++{
-		for j := i+1;j < len(ary1);j++{
-			if ary1[i] + ary1[j] == 8{
-				fmt1.Println(i,j)
+		var ary1 = [...]int{1, 3, 5, 7, 8}
+		for i :=0;i<len(ary1);i++{
+			for j := i+1;j < len(ary1);j++{
+				if ary1[i] + ary1[j] == 8{
+					fmt1.Println(i,j)
+				}
 			}
 		}
-	}
-	 */
-	var scoreMap = make(map[string]int,200)
-	for i := 0;i < 20;i++{
-		key := fmt.Sprintf("stu%02d",i)
+	*/
+	var scoreMap = make(map[string]int, 200)
+	for i := 0; i < 20; i++ {
+		key := fmt.Sprintf("stu%02d", i)
 		value := rand.Intn(100)
 		scoreMap[key] = value
 	}
 
 	var keys = make([]string, 0, 200)
-	for key := range scoreMap{
-		keys = append(keys,key)
+	for key := range scoreMap {
+		keys = append(keys, key)
 	}
 	sort.Strings(keys)
-	for _,key := range keys{
-		fmt.Println(key,scoreMap[key])
+	for _, key := range keys {
+		fmt.Println(key, scoreMap[key])
 	}
 }
