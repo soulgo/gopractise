@@ -22,7 +22,6 @@ func copy_modeify_demo() {
 		fmt.Printf("create tmp file failed,err:%v\n", err)
 		return
 	}
-	defer tmpFile.Close()
 	//读取源文件写入临时文件
 	var ret [1]byte
 	n, err := fileObj.Read(ret[:])
