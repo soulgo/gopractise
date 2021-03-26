@@ -33,7 +33,7 @@ func copy_modeify_demo() {
 	tmpFile.Write(ret[:n])
 	//写入要插入的内容
 	var s []byte
-	s = []byte{'c'}
+	s = []byte{'c', 'a', 'a', '1'}
 	tmpFile.Write(s)
 	//紧接着把源文件后续的内容写入临时文件
 	var x [1024]byte
