@@ -1,98 +1,58 @@
 package mylogger
 
 import (
-	"errors"
 	"fmt"
-	"strings"
 	"time"
 )
 
-//在终端写日志相关内容
-type LogLevel uint16
-
-//常量
-const (
-	Unknown LogLevel = iota
-	DEBUG
-	INFO
-	WARNING
-	ERROR
-	FATAL
-)
-
-//日志开关
-func parseLogLevel(s string) (LogLevel, error) {
-	s = strings.ToLower(s)
-	switch s {
-	case "debug":
-		return DEBUG, nil
-	case "info":
-		return INFO, nil
-	case "warning":
-		return WARNING, nil
-	case "error":
-		return ERROR, nil
-	case "fatal":
-		return FATAL, nil
-	default:
-		err := errors.New("无效得日志级别")
-		return Unknown, err
-	}
-}
-
 //Logger日志结构体
-type Logger struct {
+type consoleLogger struct {
 	Level LogLevel
 }
 
 //NewLog构造函数
-func NewLog(levelStr string) Logger {
+func NewLog(levelStr string) consoleLogger {
 	level, err := parseLogLevel(levelStr)
 	if err != nil {
 		panic(err)
 	}
-	return Logger{
+	return consoleLogger{
 		Level: level,
 	}
 }
 
 //判断日志级别
-func (l Logger) enable(LogLevel LogLevel) bool {
-	return l.Level <= LogLevel
+func (c consoleLogger) enable(LogLevel LogLevel) bool {
+	return c.Level <= LogLevel
+}
+
+//提取出公共得部分,增加一个可写可不写得接口，这个参数可以有，也可以没有
+func (c consoleLogger) log(lv LogLevel, format string, a ...interface{}) {
+	if c.enable(lv) {
+		msg := fmt.Sprintf(format, a...)
+		now := time.Now()
+		funcName, fileName, lineNo := getInfo(3)
+		fmt.Printf("[%s] [%s] [%s:%s:%d] %s\n", now.Format("2006-01-02 15:04:05"), getLogString(lv), funcName, fileName, lineNo, msg)
+	}
 }
 
 //输出到日志
-func (l Logger) Debug(msg string) {
-	if l.enable(DEBUG) {
-		now := time.Now()
-		fmt.Printf("[%s] [DEBUG] %s\n", now.Format("2006-01-02 15:04:05"), msg)
-	}
+func (c consoleLogger) Debug(format string, a ...interface{}) {
+	c.log(DEBUG, format, a...)
 }
 
-func (l Logger) Info(msg string) {
-	if l.enable(INFO) {
-		now := time.Now()
-		fmt.Printf("[%s] [INFO] %s\n", now.Format("2006-01-02 15:04:05"), msg)
-	}
+func (c consoleLogger) Info(format string, a ...interface{}) {
+	c.log(INFO, format, a...)
 }
 
-func (l Logger) Warning(msg string) {
-	if l.enable(WARNING) {
-		now := time.Now()
-		fmt.Printf("[%s] [WARNING] %s\n", now.Format("2006-01-02 15:04:05"), msg)
-	}
+func (c consoleLogger) Warning(format string, a ...interface{}) {
+	c.log(WARNING, format, a...)
 }
 
-func (l Logger) Error(msg string) {
-	if l.enable(ERROR) {
-		now := time.Now()
-		fmt.Printf("[%s] [ERROR] %s\n", now.Format("2006-01-02 15:04:05"), msg)
-	}
+func (c consoleLogger) Error(format string, a ...interface{}) {
+	c.log(ERROR, format, a...)
 }
 
-func (l Logger) Fatal(msg string) {
-	if l.enable(FATAL) {
-		now := time.Now()
-		fmt.Printf("[%s] [FATAL] %s\n", now.Format("2006-01-02 15:04:05"), msg)
-	}
+func (c consoleLogger) Fatal(format string, a ...interface{}) {
+	c.log(FATAL, format, a...)
 }
