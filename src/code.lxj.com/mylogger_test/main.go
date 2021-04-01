@@ -4,8 +4,13 @@ import (
 	"code.lxj.com/mylogger"
 )
 
+//调用接口
+var log mylogger.Logger
+
 func main() {
+	//log = mylogger.NewConsoleLog("error")
 	log := mylogger.NewFileLogger("info", "./", "lxj.log", 10*1024)
+
 	for {
 		log.Debug("这是一条debug日志")
 		log.Info("这是一条Info日志")

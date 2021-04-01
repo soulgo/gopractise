@@ -7,8 +7,7 @@ import (
 	"time"
 )
 
-//往文件里写日志相关内容
-
+//往文件里写日志相关内容，日志文件结构体
 type FileLogger struct {
 	Level       LogLevel
 	filePath    string //日志文件保存得路径
@@ -58,12 +57,12 @@ func (f *FileLogger) initFile() error {
 	return nil
 }
 
-//判断日志级别
+//判断日志级别，判断是否需要记录该日志
 func (f *FileLogger) enable(LogLevel LogLevel) bool {
 	return f.Level <= LogLevel
 }
 
-//判断文件大小
+//判断文件大小,是否需要切割
 func (f *FileLogger) checkSize(file *os.File) bool {
 	fileInfo, err := file.Stat()
 	if err != nil {
@@ -99,7 +98,7 @@ func (f *FileLogger) splitSize(file *os.File) (*os.File, error) {
 	return fileObj, nil
 }
 
-//输出日志格式，error及以上得日志输出再输出到error日志里
+//记录日志得方法，输出日志格式，error及以上得日志输出再输出到error日志里
 func (f *FileLogger) log(lv LogLevel, format string, a ...interface{}) {
 	if f.enable(lv) {
 		msg := fmt.Sprintf(format, a...)
