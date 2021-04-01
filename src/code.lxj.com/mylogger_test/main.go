@@ -2,7 +2,6 @@ package main
 
 import (
 	"code.lxj.com/mylogger"
-	"time"
 )
 
 func main() {
@@ -16,6 +15,6 @@ func main() {
 		c := "北京大学"
 		log.Error("这是一条Error日志，id:%d,name:%s,address:%s", a, b, c)
 		log.Fatal("这是一条Fatal日志")
-		time.Sleep(time.Second * 2)
+		//time.Sleep(time.Second * 2)
 	}
 }

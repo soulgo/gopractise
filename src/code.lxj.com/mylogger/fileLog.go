@@ -63,16 +63,67 @@ func (f *FileLogger) enable(LogLevel LogLevel) bool {
 	return f.Level <= LogLevel
 }
 
+//判断文件大小
+func (f *FileLogger) checkSize(file *os.File) bool {
+	fileInfo, err := file.Stat()
+	if err != nil {
+		fmt.Printf("get file info failed,err:%v\n", err)
+		return false
+	}
+	//如果当前文件得大小大于最大尺寸就返回true
+	return fileInfo.Size() >= f.maxFileSize
+}
+
+//根据大小切割日志
+func (f *FileLogger) splitSize(file *os.File) (*os.File, error) {
+	//需要切割日志文件
+	nowStr := time.Now().Format("20060102150405000")
+	fileInfo, err := file.Stat()
+	if err != nil {
+		fmt.Printf("get file info failed,err:%v\n", err)
+		return nil, err
+	}
+	logNmae := path.Join(f.filePath, fileInfo.Name())
+	newLogName := fmt.Sprintf("%s.%s", logNmae, nowStr)
+	//1、关闭当前得日志文件
+	file.Close()
+	//2、备份旧文件并且根据时间重命名
+	os.Rename(logNmae, newLogName)
+	//3、打开一个新的日志文件
+	fileObj, err := os.OpenFile(logNmae, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Printf("open new log file failed,err:%v\n", err)
+		return nil, err
+	}
+	//4、将打开得新日志文件对象赋值给f.fileObj
+	return fileObj, nil
+}
+
 //输出日志格式，error及以上得日志输出再输出到error日志里
 func (f *FileLogger) log(lv LogLevel, format string, a ...interface{}) {
 	if f.enable(lv) {
 		msg := fmt.Sprintf(format, a...)
 		now := time.Now()
 		funcName, fileName, lineNo := getInfo(3)
-		fmt.Fprintf(f.fileObj, "[%s] [%s] [%s:%s:%d] %s\n", now.Format("2006-01-02 15:04:05"), getLogString(lv), funcName, fileName, lineNo, msg)
+		//判断日志级别，如果是error级别以上得日志就单独记录
 		if lv >= ERROR {
-			//如果要记录得日志大于等于ERROR级别，我还要在err日志中在记录一遍
+			if f.checkSize(f.errFileObj) {
+				newFile, err := f.splitSize(f.errFileObj)
+				if err != nil {
+					return
+				}
+				f.errFileObj = newFile
+			}
 			fmt.Fprintf(f.errFileObj, "[%s] [%s] [%s:%s:%d] %s\n", now.Format("2006-01-02 15:04:05"), getLogString(lv), funcName, fileName, lineNo, msg)
+		} else {
+			if f.checkSize(f.fileObj) {
+				newFile, err := f.splitSize(f.fileObj)
+				if err != nil {
+					return
+				}
+				f.fileObj = newFile
+			}
+			fmt.Fprintf(f.fileObj, "[%s] [%s] [%s:%s:%d] %s\n", now.Format("2006-01-02 15:04:05"), getLogString(lv), funcName, fileName, lineNo, msg)
 		}
 	}
 }
