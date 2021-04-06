@@ -36,7 +36,7 @@ func NewFileLogger(levelStr, fp, fn string, maxSize int64) *FileLogger {
 	return f1
 }
 
-//初始化日志文件
+//初始化日志文件：根据指定的日志文件路径和文件名打开日志文件
 func (f *FileLogger) initFile() error {
 	fullName := path.Join(f.filePath, f.fileName)
 	//正常日志
@@ -64,6 +64,7 @@ func (f *FileLogger) enable(LogLevel LogLevel) bool {
 
 //判断文件大小,是否需要切割
 func (f *FileLogger) checkSize(file *os.File) bool {
+
 	fileInfo, err := file.Stat()
 	if err != nil {
 		fmt.Printf("get file info failed,err:%v\n", err)
