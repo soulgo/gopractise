@@ -53,10 +53,14 @@ func main() {
 	now := time.Now()
 	m2 := now.Format("2006-01-02 15:04:00")
 	m, _ := time.ParseDuration("1h")
+	fmt.Println(m)
+	fmt.Println(m2)
 	m1 := now.Add(m)
-	m3 := m1.Format("2006-01-02 15:04:00")
-	t1, _ := time.ParseInLocation("2006-01-02 15:04:05", m2, time.Local)
-	t2, _ := time.ParseInLocation("2006-01-02 15:04:05", m3, time.Local)
+	fmt.Println(m1)
+	//m1 := now.Add(m)
+	//m3 := m1.Format("2006-01-02 15:04:00")
+	//t1, _ := time.ParseInLocation("2006-01-02 15:04:05", m2, time.Local)
+	//t2, _ := time.ParseInLocation("2006-01-02 15:04:05", m3, time.Local)
 	/*
 		fmt.Println(t1)
 		if t1.Equal(t2){
@@ -65,6 +69,6 @@ func main() {
 			fmt.Println("不相等")
 		}
 	*/
-	fmt.Println(t1.After(t2))
+	//fmt.Println(t1.After(t2))
 
 }
