@@ -1,13 +1,14 @@
 package main
 
 import (
-	"code.lxj.com/mylogger"
+	"code.lxj.com/mylogger_time"
+	"fmt"
 	"time"
 )
 
 //调用接口：声明一个全局的接口变量
-var log mylogger.Logger
-
+//var log mylogger.Logger
+/*
 func main() {
 	//终端日志实例
 	//log = mylogger.NewConsoleLog("error")
@@ -25,4 +26,20 @@ func main() {
 		time.Sleep(time.Second * 2)
 	}
 
+}
+*/
+func main() {
+	log := mylogger_time.NewFileLogger("info")
+	err := log.FileInit(true, "./", "detail.log")
+	if err != nil {
+		fmt.Printf("日志文件初始化失败,%s", err)
+		return
+	}
+
+	for {
+		log.Debug("这是一条debug日志")
+		log.Info("这是一条Info日志")
+		//time.Sleep(time.Millisecond * 300)
+		time.Sleep(time.Second)
+	}
 }

@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func main() {
 	// #求数组[1, 3, 5, 7, 8]所有元素的和
 	// var sum int = 0
@@ -21,15 +19,17 @@ func main() {
 			}
 		}
 	*/
-	a := [3][2]string{
-		{"北京", "上海"},
-		{"广州", "深圳"},
-		{"成都", "重庆"},
-	}
-	for _, v1 := range a {
-		for _, v2 := range v1 {
-			fmt.Printf("%s\t", v2)
+	/*
+		a := [3][2]string{
+			{"北京", "上海"},
+			{"广州", "深圳"},
+			{"成都", "重庆"},
 		}
-		fmt.Println()
-	}
+		for _, v1 := range a {
+			for _, v2 := range v1 {
+				fmt.Printf("%s\t", v2)
+			}
+			fmt.Println()
+		}
+	*/
 }
